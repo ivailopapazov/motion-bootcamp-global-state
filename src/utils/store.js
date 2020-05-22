@@ -1,11 +1,5 @@
 import { createStore, combineReducers } from './dedux';
-import todosReducer from '../reducers/todosReducer';
-import userReducer from '../reducers/userReducer';
-
-const rootReducer = combineReducers({
-    user: userReducer,
-    todos: todosReducer,
-});
+import rootReducer from '../reducers';
 
 const store = createStore(rootReducer);
 
