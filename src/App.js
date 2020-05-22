@@ -1,22 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useDeduxContext } from './utils/react-dedux'
+import { connect } from './utils/react-dedux'
 import './App.css';
 
-function App() {
-    let store = useDeduxContext();
+function App({
+    todos,
+    addTodo,
+    toggleTodo,
+}) {
     let [todo, setTodo] = useState('');
-    let [todos, setTodos] = useState(store.getState().todos);
-
-    store.subscribe(state => {
-        setTodos(state.todos);
-    });
-
-    const toggleTodo = todo => {
-        store.dispatch({
-            type: 'TODO_TOGGLE',
-            payload: todo
-        });
-    }
 
     let mappedTodos = todos
         .map(x => (
@@ -25,15 +16,11 @@ function App() {
             </li>
         ));
 
-    const addTodo = () => {
-        store.dispatch({ type: 'TODO_ADD', payload: { name: todo, isChecked: false } })
-    };
-
     return (
         <div className="App">
             <div className="input-todo">
                 <input type="text" onChange={e => setTodo(e.target.value)} />
-                <button onClick={addTodo}>Add</button>
+                <button onClick={() => addTodo(todo)}>Add</button>
             </div>
             <ul>
                 {mappedTodos}
@@ -42,4 +29,13 @@ function App() {
     );
 }
 
-export default App;
+let mapStateToProps = state => ({
+    todos: state.todos
+});
+
+let mapDispatchToProps = dispatch => ({
+    addTodo: name => dispatch({type: 'TODO_ADD', payload: {name, isChecked: false}}),
+    toggleTodo: todo => dispatch({type: 'TODO_TOGGLE', payload: todo})
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

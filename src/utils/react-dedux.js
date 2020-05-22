@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
 const Context = createContext();
+
+const useDeduxContext = () => useContext(Context);
 
 const Provider = ({
     store,
@@ -31,12 +33,20 @@ const addThunkSupportToDispatch = dispatch => input => {
 
 const connect = (mapState, mapProps) => Component => props => {
     let { getState, dispatch, subscribe } = useDeduxContext();
+    let [oldState, setState] = useState();
+
+    // Todo: need some optimization
+    subscribe(newState => {
+        if (newState) {
+            setState(newState);
+        }
+    });
 
     let dispatchWithPromise = addPromiseSupportToDispatch(dispatch);
     let dispatchWithPromiseAndThunkSupport = addThunkSupportToDispatch(dispatchWithPromise);
 
     let propActions = {};
-    
+
     let mappedProps = mapState ? mapState(getState()) : {};
 
     if (typeof(mapProps) === 'function') {
@@ -52,8 +62,8 @@ const connect = (mapState, mapProps) => Component => props => {
     return <Component {...props} {...mappedProps} {...propActions} />
 };
 
-export default connect;
-
-export {Provider};
-
-export const useContext = () => useContext(Context);
+export {
+    connect,
+    Provider,
+    useDeduxContext,
+};
