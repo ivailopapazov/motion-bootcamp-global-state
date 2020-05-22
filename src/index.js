@@ -3,14 +3,14 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { DeduxProvider } from './utils/dedux';
+import { Provider } from './utils/react-dedux';
 import store from './utils/store';
 
 ReactDOM.render(
   <React.StrictMode>
-    <DeduxProvider store={store}>
+    <Provider store={store}>
       <App />
-    </DeduxProvider>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

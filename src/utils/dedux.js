@@ -1,5 +1,3 @@
-import React, { createContext, useContext } from 'react';
-
 const createStore = reducer => {
     let state;
     let listeners = [];
@@ -8,7 +6,6 @@ const createStore = reducer => {
 
     const dispatch = action => {
         state = reducer(state, action);
-        console.log(state);
         
         listeners.forEach(l => l(state));
     };
@@ -24,23 +21,6 @@ const createStore = reducer => {
     return { getState, dispatch, subscribe };
 };
 
-const DeduxContext = createContext();
-
-const useDeduxContext = () => useContext(DeduxContext);
-
-const DeduxProvider = ({
-    store,
-    children,
-}) => {
-    return (
-        <DeduxContext.Provider value={store}>
-            {children}
-        </DeduxContext.Provider>
-    );
-};
-
 export {
-    createStore,
-    DeduxProvider,
-    useDeduxContext,
+    createStore
 };
