@@ -21,7 +21,7 @@ const addPromiseSupportToDispatch = dispatch => input => {
     }
 
     return dispatch(input);
-}
+};
 
 const addThunkSupportToDispatch = dispatch => input => {
     if (typeof(input) === 'function') {
