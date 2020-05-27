@@ -1,40 +1,71 @@
-const initialState = [
-    { _id: 1, name: 'Shopping', isChecked: false },
-    { _id: 2, name: 'Cleaning', isChecked: true },
-    { _id: 3, name: 'Shopping1', isChecked: false },
-    { _id: 4, name: 'Cleaning1', isChecked: true },
-];
+import { combineReducers } from "../utils/dedux";
+import todo from './todoReducer';
 
-// Quick fix, it will be handled by the back end
-let counter = 5;
+const initialState = {
+    1: { _id: 1, name: 'Shopping', isChecked: false },
+    2: { _id: 2, name: 'Cleaning', isChecked: true },
+    3: { _id: 3, name: 'Shopping1', isChecked: false },
+    4: { _id: 4, name: 'Cleaning1', isChecked: true },
+};
 
-const todo = (state, action) => {
-    if (action.payload?._id && state._id !== action.payload._id) {
-        return state;
-    }
+let initialAllIds = Object.keys(initialState);
 
+const allIds = (state = initialAllIds, action) => {
     switch (action.type) {
         case 'TODO_ADD':
-            return {_id: counter++, name: action.payload, isChecked: false};
+            return [...state, action.payload._id]
+        default:
+            return state;
+    }
+}
+
+const byId = (state = initialState, action) => {
+    let id = action?.payload?._id;
+    
+    switch (action.type) {
+        case 'TODO_ADD':
         case 'TODO_TOGGLE':
-            return {...state, isChecked: !state.isChecked};
-        case 'TODO_CHECK_ALL':
-            return {...state, isChecked: true}
+            return {...state, [id]: todo(state[id], action)};
+        // case 'TODO_CHECK_ALL': 
+        //     return Object.keys(state).map(id => todo(state[id], action));
         default:
             return state;
     }
 };
 
-const todos = (state = initialState, action) => {
+const filter = (state = 'all', action) => {
     switch (action.type) {
-        case 'TODO_ADD':
-            return [...state, todo(undefined, action)];
-        case 'TODO_TOGGLE':
-        case 'TODO_CHECK_ALL':
-            return state.map(x => todo(x, action));
+        case 'TODOS_FILTER_SET':
+            return action.payload;
         default:
             return state;
     }
-};
+}
+
+const todos = combineReducers({
+    allIds,
+    byId,
+    filter,
+});
 
 export default todos;
+
+const getFilteredTodos = (state, filter) => {
+    switch (filter) {
+        case 'finished':
+            return state.filter(x => x.isChecked);
+        case 'unfinished':
+            return state.filter(x => !x.isChecked);
+        default:
+            return state;
+    }
+};
+
+export const getTodos = (state) => {
+    // Temporary solution
+    let filter = state.filter
+
+    let newState = state.allIds.map(x => state.byId[x]);
+
+    return getFilteredTodos(newState, filter);
+};

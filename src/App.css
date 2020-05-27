@@ -40,3 +40,7 @@
 .checked {
   text-decoration: line-through;
 }
+
+.todo-filter span {
+  margin-right: 5px;
+}

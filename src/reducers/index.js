@@ -1,5 +1,5 @@
 import { combineReducers } from  '../utils/dedux';
-import todos from './todosReducer';
+import todos, * as fromTodos from './todosReducer';
 import user, * as fromUser from './userReducer';
 
 const rootReducer = combineReducers({
@@ -9,5 +9,6 @@ const rootReducer = combineReducers({
 
 export default rootReducer;
 
-export const getTodos = state => state.todos;
 export const getUsername = state => fromUser.getUsername(state.user);
+
+export const getTodos = (state, filter) => fromTodos.getTodos(state.todos, filter);

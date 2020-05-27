@@ -10,13 +10,14 @@ function App({
     username,
     setName,
     checkAll,
+    setFilter,
 }) {
     let [todo, setTodo] = useState('');
     let [nameInput, setNameInput] = useState('');
 
     let mappedTodos = todos
         .map(x => (
-            <li onClick={() => toggleTodo(x)} className={x.isChecked ? 'checked' : ''} key={x.name}>
+            <li onClick={() => toggleTodo(x)} className={x.isChecked ? 'checked' : ''} key={x._id}>
                 {x.name}
             </li>
         ));
@@ -42,6 +43,12 @@ function App({
             <ul>
                 {mappedTodos}
             </ul>
+
+            <div className="todo-filter">
+                <span onClick={() => setFilter('all')}>All</span>
+                <span onClick={() => setFilter('unfinished')}>Unfinished</span>
+                <span onClick={() => setFilter('finished')}>Finished</span>
+            </div>
         </div>
     );
 }
@@ -52,7 +59,8 @@ let mapStateToProps = state => ({
 });
 
 let mapDispatchToProps = dispatch => ({
-    addTodo: name => dispatch({type: 'TODO_ADD', payload: name}),
+    setFilter: filter => dispatch({type: 'TODOS_FILTER_SET', payload: filter}),
+    addTodo: name => dispatch({type: 'TODO_ADD', payload: {_id: Date.now(), name}}),
     toggleTodo: todo => dispatch({type: 'TODO_TOGGLE', payload: todo}),
     setName: name => dispatch({type: 'USER_NAME_SET', payload: name}),
     checkAll: () => dispatch({type: 'TODO_CHECK_ALL'}),
