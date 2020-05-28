@@ -28,7 +28,7 @@ const connect = (mapState, mapProps) => Component => props => {
 
     let propActions = {};
 
-    let mappedProps = mapState ? mapState(getState()) : {};
+    let mappedProps = mapState ? mapState(getState(), props) : {};
 
     if (typeof(mapProps) === 'function') {
         propActions = mapProps(dispatch);

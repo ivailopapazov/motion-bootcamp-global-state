@@ -55,18 +55,10 @@ function App({
     );
 }
 
-let mapStateToProps = state => ({
+let mapStateToProps = (state) => ({
     todos: getTodos(state),
     username: getUsername(state),
 });
-
-// let mapDispatchToProps = dispatch => ({
-//     setFilter: filter => dispatch({type: 'TODOS_FILTER_SET', payload: filter}),
-//     addTodo: addTodo,
-//     toggleTodo: todo => dispatch({type: 'TODO_TOGGLE', payload: todo}),
-//     setName: name => dispatch({type: 'USER_NAME_SET', payload: name}),
-//     checkAll: () => dispatch({type: 'TODO_CHECK_ALL'}),
-// });
 
 export default connect(mapStateToProps, {
     addTodo,
