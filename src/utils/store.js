@@ -1,4 +1,4 @@
-import { createStore, combineReducers } from './dedux';
+import { createStore, applyMiddleware } from './dedux';
 import rootReducer from '../reducers';
 
 const saveState = state => {
@@ -15,7 +15,25 @@ const loadState = () => {
     }
 }; 
 
-const store = createStore(rootReducer, loadState());
+const addPromiseSupportToDispatch = store => dispatch => action => {
+    if (typeof(action.then) === 'function') {
+        return action.then(res => dispatch(res));
+    }
+
+    return dispatch(action);
+};
+
+const addThunkSupportToDispatch = store => dispatch => action => {
+    if (typeof(action) === 'function') {
+        return action(dispatch);
+    }
+
+    return dispatch(action);
+};
+
+let enhancer = applyMiddleware(addThunkSupportToDispatch, addPromiseSupportToDispatch)
+
+const store = createStore(rootReducer, loadState(), enhancer);
 
 store.subscribe(state => {
     // TODO: Add throttle

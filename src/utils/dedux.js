@@ -1,10 +1,10 @@
-const createStore = (reducer, preloadedState) => {
+const createStore = (reducer, preloadedState, enhancer) => {
     let state = preloadedState;
     let listeners = [];
 
     const getState = () => state;
 
-    const dispatch = action => {
+    let dispatch = action => {
         state = reducer(state, action);
         
         listeners.forEach(l => l(state));
@@ -16,9 +16,15 @@ const createStore = (reducer, preloadedState) => {
         return () => listeners.filter(x => x != listener);
     };
 
-    dispatch({});
+    const store = { getState, dispatch, subscribe };
 
-    return { getState, dispatch, subscribe };
+    if (enhancer) {
+        store.dispatch = enhancer(store, dispatch);
+    }
+
+    store.dispatch({});
+
+    return store;
 };
 
 const combineReducers = reducers => (state = {}, action) => {
@@ -30,7 +36,14 @@ const combineReducers = reducers => (state = {}, action) => {
         }, {});
 };
 
+const applyMiddleware = (...middlewares) => (store, dispatch) => {
+    return middlewares.reduce((dispatch, middleware) => {
+        return middleware(store)(dispatch)
+    }, dispatch);
+};
+
 export {
     createStore,
     combineReducers,
+    applyMiddleware,
 };

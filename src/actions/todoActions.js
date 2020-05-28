@@ -8,10 +8,12 @@ const addTodoSuccess = data => ({
     payload: data
 });
 
-export const addTodo = name => {
+export const addTodo = name => dispatch => {
+    console.log(dispatch);
+    
     let newTodo = {_id: Date.now(), name}
     
-    return addTodoSuccess(newTodo);
+    dispatch(addTodoSuccess(newTodo));
 };
 
 export const toggleTodo = todo => {

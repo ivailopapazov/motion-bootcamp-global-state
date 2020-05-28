@@ -15,22 +15,6 @@ const Provider = ({
     );
 };
 
-const addPromiseSupportToDispatch = dispatch => input => {
-    if (typeof(input.then) === 'function') {
-        return input.then(res => dispatch(res));
-    }
-
-    return dispatch(input);
-};
-
-const addThunkSupportToDispatch = dispatch => input => {
-    if (typeof(input) === 'function') {
-        return input(dispatch);
-    }
-
-    return dispatch(input);
-};
-
 const connect = (mapState, mapProps) => Component => props => {
     let { getState, dispatch, subscribe } = useDeduxContext();
     let [oldState, setState] = useState();
@@ -42,18 +26,15 @@ const connect = (mapState, mapProps) => Component => props => {
         }
     });
 
-    let dispatchWithPromise = addPromiseSupportToDispatch(dispatch);
-    let dispatchWithPromiseAndThunkSupport = addThunkSupportToDispatch(dispatchWithPromise);
-
     let propActions = {};
 
     let mappedProps = mapState ? mapState(getState()) : {};
 
     if (typeof(mapProps) === 'function') {
-        propActions = mapProps(dispatchWithPromiseAndThunkSupport);
+        propActions = mapProps(dispatch);
     } else { 
         propActions = Object.keys(mapProps).reduce((a, x) => {
-            a[x] = data => dispatchWithPromiseAndThunkSupport(mapProps[x](data));
+            a[x] = data => dispatch(mapProps[x](data));
 
             return a;
         }, {});
