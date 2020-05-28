@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { connect } from './utils/react-dedux'
 import { getTodos, getUsername } from './reducers'
+import { addTodo, toggleTodo, setFilter } from './actions/todoActions'
+import { setName } from './actions/userActions'
 import './App.css';
 
 function App({
@@ -58,12 +60,17 @@ let mapStateToProps = state => ({
     username: getUsername(state),
 });
 
-let mapDispatchToProps = dispatch => ({
-    setFilter: filter => dispatch({type: 'TODOS_FILTER_SET', payload: filter}),
-    addTodo: name => dispatch({type: 'TODO_ADD', payload: {_id: Date.now(), name}}),
-    toggleTodo: todo => dispatch({type: 'TODO_TOGGLE', payload: todo}),
-    setName: name => dispatch({type: 'USER_NAME_SET', payload: name}),
-    checkAll: () => dispatch({type: 'TODO_CHECK_ALL'}),
-});
+// let mapDispatchToProps = dispatch => ({
+//     setFilter: filter => dispatch({type: 'TODOS_FILTER_SET', payload: filter}),
+//     addTodo: addTodo,
+//     toggleTodo: todo => dispatch({type: 'TODO_TOGGLE', payload: todo}),
+//     setName: name => dispatch({type: 'USER_NAME_SET', payload: name}),
+//     checkAll: () => dispatch({type: 'TODO_CHECK_ALL'}),
+// });
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, {
+    addTodo,
+    toggleTodo,
+    setFilter,
+    setName,
+})(App);

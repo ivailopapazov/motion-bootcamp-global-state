@@ -1,5 +1,8 @@
 import { combineReducers } from "../utils/dedux";
 import todo from './todoReducer';
+import {
+    TODO_ADD,
+} from '../actions/actionTypes';
 
 const initialState = {
     1: { _id: 1, name: 'Shopping', isChecked: false },
@@ -12,7 +15,7 @@ let initialAllIds = Object.keys(initialState);
 
 const allIds = (state = initialAllIds, action) => {
     switch (action.type) {
-        case 'TODO_ADD':
+        case TODO_ADD:
             return [...state, action.payload._id]
         default:
             return state;
@@ -23,7 +26,7 @@ const byId = (state = initialState, action) => {
     let id = action?.payload?._id;
     
     switch (action.type) {
-        case 'TODO_ADD':
+        case TODO_ADD:
         case 'TODO_TOGGLE':
             return {...state, [id]: todo(state[id], action)};
         // case 'TODO_CHECK_ALL': 
