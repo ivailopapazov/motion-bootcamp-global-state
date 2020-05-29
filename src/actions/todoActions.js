@@ -9,8 +9,6 @@ const addTodoSuccess = data => ({
 });
 
 export const addTodo = name => dispatch => {
-    console.log(dispatch);
-    
     let newTodo = {_id: Date.now(), name}
     
     dispatch(addTodoSuccess(newTodo));
@@ -23,3 +21,5 @@ export const toggleTodo = todo => {
 export const setFilter = filter => {
     return {type: 'TODOS_FILTER_SET', payload: filter};
 };
+
+export const checkAll = () => ({type: 'TODO_CHECK_ALL'});

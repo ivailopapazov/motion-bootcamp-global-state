@@ -1,5 +1,6 @@
 import { combineReducers } from "../utils/dedux";
 import todo from './todoReducer';
+import mapValues from 'lodash/mapValues';
 import {
     TODO_ADD,
 } from '../actions/actionTypes';
@@ -29,8 +30,8 @@ const byId = (state = initialState, action) => {
         case TODO_ADD:
         case 'TODO_TOGGLE':
             return {...state, [id]: todo(state[id], action)};
-        // case 'TODO_CHECK_ALL': 
-        //     return Object.keys(state).map(id => todo(state[id], action));
+        case 'TODO_CHECK_ALL': 
+            return mapValues(state, t => todo(t, action));
         default:
             return state;
     }

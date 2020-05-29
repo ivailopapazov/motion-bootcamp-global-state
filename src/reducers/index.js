@@ -11,4 +11,4 @@ export default rootReducer;
 
 export const getUsername = state => fromUser.getUsername(state.user);
 
-export const getTodos = (state, filter) => fromTodos.getTodos(state.todos, filter);
+export const getTodos = state => fromTodos.getTodos(state.todos);

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from './utils/react-dedux'
 import { getTodos, getUsername } from './reducers'
-import { addTodo, toggleTodo, setFilter } from './actions/todoActions'
+import { addTodo, toggleTodo, setFilter, checkAll } from './actions/todoActions'
 import { setName } from './actions/userActions'
 import './App.css';
 
@@ -63,6 +63,7 @@ let mapStateToProps = (state) => ({
 export default connect(mapStateToProps, {
     addTodo,
     toggleTodo,
+    checkAll,
     setFilter,
     setName,
 })(App);
